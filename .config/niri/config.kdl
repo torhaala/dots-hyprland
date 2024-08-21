@@ -1,0 +1,432 @@
+// This config is in the KDL format: https://kdl.dev
+// "/-" comments out the following node.
+
+input {
+    keyboard {
+        xkb {
+            // layout "us"
+            // options = "grp:win_space_toggle"
+        }
+        repeat-delay 250
+        repeat-rate 35
+        track-layout "global"
+    }
+
+    // Next sections include libinput settings.
+    // Omitting settings disables them, or leaves them at their default values.
+    touchpad {
+        tap
+        // dwt
+        // dwtp
+        natural-scroll
+        // accel-speed 0.2
+        // accel-profile "flat"
+        // tap-button-map "left-middle-right"
+        // click-method "clickfinger"
+    }
+    
+    // Each of the below sections can contain these options
+    // natural-scroll
+    // accel-speed 0.2
+    // accel-profile "flat"
+    mouse { }
+    trackpoint { }
+    tablet { map-to-output "eDP-1"; }
+    touch { map-to-output "eDP-1"; }
+}
+
+// Find outputs with `niri msg outputs`
+// Remember to uncomment the node by removing "/-"!
+/-output "eDP-1" {
+    scale 1
+    // Options: normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+    transform "normal"
+    // Resolution and, optionally, refresh rate of the output.
+    mode "1920x1080@60"
+    // Position of the output in the global coordinate space.
+    position x=1280 y=0
+}
+
+layout {
+    focus-ring {
+        off         // Uncommend to disable
+        width 1
+        active-color "#EEDCF5"
+        inactive-color "#E7E0E5"
+    }
+    border { // Focus ring but always visible
+        // off         // Uncommend to disable active border
+        width 1
+        active-color "#EEDCF5"
+        inactive-color "#505050"
+    }
+
+    // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
+    preset-column-widths {
+        // Proportion sets the width as a fraction of the output width, taking gaps into account.
+        // For example, you can perfectly fit four windows sized "proportion 0.25" on an output.
+        // The default preset widths are 1/3, 1/2 and 2/3 of the output.
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+
+        // Fixed sets the width in logical pixels exactly.
+        // fixed 1920
+    }
+
+    // You can change the default width of the new windows.
+    // default-column-width { proportion 0.5; }
+    // If you leave the brackets empty, the windows themselves will decide their initial width.
+    // default-column-width {}
+
+    // Set gaps around windows in logical pixels.
+    gaps 4
+
+    // Struts shrink the area occupied by windows, similarly to layer-shell panels.
+    struts { // left, right, top, bottom
+        left 5
+        right 5
+    }
+
+    // When to center a column when changing focus, options are:
+    // - "never", default behavior, focusing an off-screen column will keep at the left
+    //   or right edge of the screen.
+    // - "on-overflow", focusing a column will center it if it doesn't fit
+    //   together with the previously focused column.
+    // - "always", the focused column will always be centered.
+    center-focused-column "never"
+}
+
+// You can override environment variables for processes spawned by niri.
+environment {
+    // See https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland
+    QT_IM_MODULE "fcitx"
+    XMODIFIERS "@im=fcitx"  
+    SDL_IM_MODULE "fcitx"
+    GLFW_IM_MODULE "ibus"
+    INPUT_METHOD "fcitx"
+
+    // ############ Themes #############
+    QT_QPA_PLATFORM "wayland"
+    QT_QPA_PLATFORMTHEME "qt5ct"
+    // QT_STYLE_OVERRIDE "kvantum"
+    // WLR_NO_HARDWARE_CURSORS "1"
+
+    // Remove a variable by using null as the value:
+    // DISPLAY null
+}
+
+cursor {
+    xcursor-theme "Bibata-Modern-Classic"
+    xcursor-size 24
+}
+prefer-no-csd
+
+// Screenshot
+screenshot-path "~/Pictures/Screenshots/Niri_screenshot_%Y-%m-%d %H-%M-%S.png"
+// screenshot-path null  // This disables saving
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+// Animation settings.
+animations {
+    // Slow down all animations by this factor. Values below 1 speed them up instead.
+    slowdown 0.8
+    // Niri supports two animation types: easing and spring.
+    // You can set properties for only ONE of them.
+    //
+    // Easing has the following settings:
+    // - duration-ms sets the duration of the animation in milliseconds.
+    // - curve sets the easing curve. Currently, available curves
+    //   are "ease-out-cubic" and "ease-out-expo".
+    //
+    // Spring animations work better with touchpad gestures, because they
+    // take into account the velocity of your fingers as you release the swipe.
+    // The parameters are less obvious and generally should be tuned
+    // with trial and error. Notably, you cannot directly set the duration.
+    // You can use this app to help visualize how the spring parameters
+    // change the animation: https://flathub.org/apps/app.drey.Elastic
+    //
+    // A spring animation is configured like this:
+    // - spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+    //
+    // The damping ratio goes from 0.1 to 10.0 and has the following properties:
+    // - below 1.0: underdamped spring, will oscillate in the end.
+    // - above 1.0: overdamped spring, won't oscillate.
+    // - 1.0: critically damped spring, comes to rest in minimum possible time
+    //        without oscillations.
+    //
+    // However, even with damping ratio = 1.0 the spring animation may oscillate
+    // if "launched" with enough velocity from a touchpad swipe.
+    //
+    // Lower stiffness will result in a slower animation more prone to oscillation.
+    //
+    // Set epsilon to a lower value if the animation "jumps" in the end.
+    //
+    // The spring mass is hardcoded to 1.0 and cannot be changed. Instead, change
+    // stiffness proportionally. E.g. increasing mass by 2x is the same as
+    // decreasing stiffness by 2x.
+
+    // Animation when switching workspaces up and down,
+    // including after the touchpad gesture.
+    workspace-switch {
+        // off
+        // spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+    }
+
+    // All horizontal camera view movement:
+    // - When a window off-screen is focused and the camera scrolls to it.
+    // - When a new window appears off-screen and the camera scrolls to it.
+    // - When a window resizes bigger and the camera scrolls to show it in full.
+    // - And so on.
+    horizontal-view-movement {
+        // off
+        // spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+    }
+
+    // Window opening animation. Note that this one has different defaults.
+    window-open {
+        // off
+        // duration-ms 150
+        // curve "ease-out-expo"
+
+        // Example for a slightly bouncy window opening:
+        // spring damping-ratio=0.8 stiffness=1000 epsilon=0.0001
+    }
+
+    // Config parse error and new default config creation notification
+    // open/close animation.
+    config-notification-open-close {
+        // off
+        // spring damping-ratio=0.6 stiffness=1000 epsilon=0.001
+    }
+}
+
+// Autostarts
+spawn-at-startup "dbus-update-activation-environment" "--all"
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP"
+spawn-at-startup "swww" "init"
+spawn-at-startup "ags"
+spawn-at-startup "fcitx5"
+spawn-at-startup "gnome-keyring-daemon" "--start" "--components=secrets"
+spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+spawn-at-startup "hypridle"
+spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store"
+spawn-at-startup "easyeffects" "--gapplication-service"
+
+binds {
+    // shows a list of important hotkeys.
+    Mod+Shift+Slash { show-hotkey-overlay; }
+
+    // Suggested binds for running programs: terminal, app launcher, screen locker.
+    Mod+T { spawn "foot"; }
+    Mod+E { spawn "nautilus" "--new-window"; }
+    Mod+C { spawn "code" "--password-store=gnome" "--enable-features=UseOzonePlatform" "--ozone-platform=wayland"; }
+    Mod+W { spawn "firefox"; }
+    Mod+Shift+W { spawn "wps"; }
+    Ctrl+Mod+W { spawn "thorium-browser" "--ozone-platform-hint=wayland" "--gtk-version=4" "--ignore-gpu-blocklist" "--enable-features=TouchpadOverscrollHistoryNavigation"; }
+    Super+X { spawn "gnome-text-editor" "--new-window"; }
+    Ctrl+Mod+V { spawn "pavucontrol"; }
+    Ctrl+Mod+Shift+V { spawn "easyeffects"; }
+    Ctrl+Shift+Escape { spawn "gnome-system-monitor"; }
+    
+    Ctrl+Mod+Slash { spawn "bash" "-c" "pkill anyrun || anyrun"; }
+    Super+L { spawn "hyprlock"; }
+    
+    // AGS
+    Mod+Tab { spawn "ags" "-t" "overview"; }
+    Mod+Slash { spawn "ags" "-t" "cheatsheet"; }
+    Mod+B { spawn "ags" "-t" "sideleft"; }
+    Mod+A { spawn "ags" "-t" "sideleft"; }
+    Mod+O { spawn "ags" "-t" "sideleft"; }
+    Mod+N { spawn "ags" "-t" "sideright"; }
+    Mod+M { spawn "ags" "run-js" "openMusicControls.value = (!mpris.getPlayer() ? false : !openMusicControls.value);"; }
+    Control+Alt+Delete { spawn "ags" "-t" "session"; }
+    Mod+K { spawn "ags" "-t" "osk"; }
+    
+    // Utils
+    Super+Period { spawn "bash" "-c" "pkill fuzzel || ~/.local/bin/fuzzel-emoji"; }
+    Super+V { spawn "bash" "-c" "pkill fuzzel || cliphist list | fuzzel --no-fuzzy --dmenu | cliphist decode | wl-copy"; }
+
+    // You can also use a shell:
+    // Mod+T { spawn "bash" "-c" "notify-send hello && exec alacritty"; }
+
+    // It works™
+    XF86AudioMute { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0%"; }
+    XF86AudioRaiseVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+    XF86AudioLowerVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+    Mod+Shift+N { spawn "bash" "-c" "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"; }
+    XF86AudioNext { spawn "bash" "-c" "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"; }
+    Mod+Shift+B { spawn "playerctl" "previous"; }
+    Mod+Shift+P { spawn "playerctl" "play-pause"; }
+    XF86AudioPlay { spawn "playerctl" "play-pause"; }
+
+    // WM
+    Mod+Q { close-window; }
+
+    Mod+Left  { focus-column-left; }
+    Mod+Right { focus-column-right; }
+    Ctrl+Mod+Semicolon { focus-column-left; }
+    Ctrl+Mod+Apostrophe { focus-column-right; }
+    Mod+Down  { focus-window-down; }
+    Mod+Up    { focus-window-up; }
+
+    Mod+Shift+Left  { move-column-left; }
+    Mod+Shift+Down  { move-window-down; }
+    Mod+Shift+Up    { move-window-up; }
+    Mod+Shift+Right { move-column-right; }
+
+    Mod+Home { focus-column-first; }
+    Mod+End  { focus-column-last; }
+    Mod+Ctrl+Home { move-column-to-first; }
+    Mod+Ctrl+End  { move-column-to-last; }
+
+    Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
+    Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
+    Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
+    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
+
+    // Alternatively, there are commands to move just a single window:
+    // Mod+Shift+Ctrl+Left  { move-window-to-monitor-left; }
+    // ...
+
+    // And you can also move a whole workspace to another monitor:
+    // Mod+Shift+Ctrl+Left  { move-workspace-to-monitor-left; }
+    // ...
+
+    Mod+Page_Down      { focus-workspace-down; }
+    Mod+Page_Up        { focus-workspace-up; }
+    Mod+U              { focus-workspace-down; }
+    Mod+I              { focus-workspace-up; }
+    Mod+Shift+Page_Down { move-column-to-workspace-down; }
+    Mod+Shift+Page_Up   { move-column-to-workspace-up; }
+    Mod+Ctrl+U         { move-column-to-workspace-down; }
+    Mod+Ctrl+I         { move-column-to-workspace-up; }
+
+    // Alternatively, there are commands to move just a single window:
+    // Mod+Ctrl+Page_Down { move-window-to-workspace-down; }
+    // ...
+
+    // Mod+Shift+Page_Down { move-workspace-down; }
+    // Mod+Shift+Page_Up   { move-workspace-up; }
+    Mod+Shift+U         { move-workspace-down; }
+    Mod+Shift+I         { move-workspace-up; }
+
+    // You can refer to workspaces by index. However, keep in mind that
+    // niri is a dynamic workspace system, so these commands are kind of
+    // "best effort". Trying to refer to a workspace index bigger than
+    // the current workspace count will instead refer to the bottommost
+    // (empty) workspace.
+    //
+    // For example, with 2 workspaces + 1 empty, indices 3, 4, 5 and so on
+    // will all refer to the 3rd workspace.
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+    Mod+Ctrl+1 { move-column-to-workspace 1; }
+    Mod+Ctrl+2 { move-column-to-workspace 2; }
+    Mod+Ctrl+3 { move-column-to-workspace 3; }
+    Mod+Ctrl+4 { move-column-to-workspace 4; }
+    Mod+Ctrl+5 { move-column-to-workspace 5; }
+    Mod+Ctrl+6 { move-column-to-workspace 6; }
+    Mod+Ctrl+7 { move-column-to-workspace 7; }
+    Mod+Ctrl+8 { move-column-to-workspace 8; }
+    Mod+Ctrl+9 { move-column-to-workspace 9; }
+
+    // Alternatively, there are commands to move just a single window:
+    // Mod+Ctrl+1 { move-window-to-workspace 1; }
+
+    Mod+Comma  { consume-window-into-column; }
+    Mod+Period { expel-window-from-column; }
+
+    // There are also commands that consume or expel a single window to the side.
+    // Mod+BracketLeft  { consume-or-expel-window-left; }
+    // Mod+BracketRight { consume-or-expel-window-right; }
+
+    Mod+R { switch-preset-column-width; }
+    Mod+D { maximize-column; }
+    Mod+F { fullscreen-window; }
+    Mod+S { center-column; }
+
+    // Finer width adjustments.
+    // This command can also:
+    // * set width in pixels: "1000"
+    // * adjust width in pixels: "-5" or "+5"
+    // * set width as a percentage of screen width: "25%"
+    // * adjust width as a percentage of screen width: "-10%" or "+10%"
+    // Pixel sizes use logical, or scaled, pixels. I.e. on an output with scale 2.0,
+    // set-column-width "100" will make the column occupy 200 physical screen pixels.
+    Mod+Minus { set-column-width "-10%"; }
+    Mod+Equal { set-column-width "+10%"; }
+    Mod+Semicolon { set-column-width "-10%"; }
+    Mod+Apostrophe { set-column-width "+10%"; }
+
+    // Finer height adjustments when in column with other windows.
+    Mod+Shift+Minus { set-window-height "-10%"; }
+    Mod+Shift+Equal { set-window-height "+10%"; }
+
+    // Actions to switch layouts.
+    // Note: if you uncomment these, make sure you do NOT have
+    // a matching layout switch hotkey configured in xkb options above.
+    // Having both at once on the same hotkey will break the switching,
+    // since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
+    // Mod+Space       { switch-layout "next"; }
+    // Mod+Shift+Space { switch-layout "prev"; }
+
+    Print { screenshot; }
+    Alt+Print { screenshot-window; }
+
+    // The quit action will show a confirmation dialog to avoid accidental exits.
+    // If you want to skip the confirmation dialog, set the flag like so:
+    // Mod+Shift+E { quit skip-confirmation=true; }
+    Mod+Shift+E { quit; }
+
+    // Powers off the monitors. To turn them back on, do any input like
+    // moving the mouse or pressing any other key.
+
+    // This debug bind will tint all surfaces green, unless they are being
+    // directly scanned out. It's therefore useful to check if direct scanout
+    // is working.
+    // Mod+Shift+Ctrl+T { toggle-debug-tint; }
+}
+
+// Settings for debugging. Not meant for normal use.
+// These can change or stop working at any point with little notice.
+debug {
+    // Make niri take over its DBus services even if it's not running as a session.
+    // Useful for testing screen recording changes without having to relogin.
+    // The main niri instance will *not* currently take back the services; so you will
+    // need to relogin in the end.
+    // dbus-interfaces-in-non-session-instances
+
+    // Wait until every frame is done rendering before handing it over to DRM.
+    // wait-for-frame-completion-before-queueing
+
+    // Enable direct scanout into overlay planes.
+    // May cause frame drops during some animations on some hardware.
+    // enable-overlay-planes
+
+    // Disable the use of the cursor plane.
+    // The cursor will be rendered together with the rest of the frame.
+    // disable-cursor-plane
+
+    // Override the DRM device that niri will use for all rendering.
+    // render-drm-device "/dev/dri/renderD129"
+
+    // Enable the color-transformations capability of the Smithay renderer.
+    // May cause a slight decrease in rendering performance.
+    // enable-color-transformations-capability
+
+    // Emulate zero (unknown) presentation time returned from DRM.
+    // This is a thing on NVIDIA proprietary drivers, so this flag can be
+    // used to test that we don't break too hard on those systems.
+    // emulate-zero-presentation-time
+}
