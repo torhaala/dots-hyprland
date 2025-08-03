@@ -753,7 +753,7 @@ if [[ "$process_files" == true ]]; then
 
   for dir_name in "${MONITOR_DIRS[@]}"; do
     repo_dir_path="${REPO_DIR}/${dir_name}"
-    home_dir_path="${HOME}/${dir_name}"
+    home_dir_path="${HOME}/.dotfiles/${dir_name}"
 
     if [[ ! -d "$repo_dir_path" ]]; then
       log_warning "Repository directory not found: $repo_dir_path"
@@ -823,7 +823,7 @@ if [[ -d "${HOME}/.local/bin" ]]; then
 fi
 
 log_header "Update Complete"
-log_success "Dotfiles update completed successfully!"
+log_success "Dotfiles update completed successfully! - cd into .dotfiles and run stow ."
 
 # Show summary
 echo
