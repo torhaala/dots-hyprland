@@ -5,6 +5,7 @@ source ./scriptdata/environment-variables
 source ./scriptdata/functions
 source ./scriptdata/installers
 source ./scriptdata/options
+XDG_CONFIG_HOME=${HOME/.dotfiles}
 
 #####################################################################################
 if ! command -v pacman >/dev/null 2>&1; then
