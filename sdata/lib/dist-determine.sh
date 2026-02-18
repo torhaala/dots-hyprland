@@ -97,7 +97,7 @@ elif [[ "$OS_DISTRO_ID" == "gentoo" ]]; then
 elif [[ "$OS_DISTRO_ID_LIKE" == "gentoo" ]]; then
   OS_GROUP_ID="gentoo"
   print_os_group_id_functions=(print_os_group_id{,_alike,_unofficial})
-elif [[ "$OS_DISTRO_ID" == "fedora" ]]; then
+elif [[ "$OS_DISTRO_ID" =~ ^(fedora|nobara)$ ]]; then
   OS_GROUP_ID="fedora"
   print_os_group_id_functions=(print_os_group_id{,_unofficial})
 elif [[ "$OS_DISTRO_ID_LIKE" == "fedora" ]]; then
